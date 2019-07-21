@@ -1,18 +1,25 @@
 package edu.jlu.com;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
-
-
+import android.view.View;
+import android.widget.Button;
+import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
-
+    Button but1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.line);
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        but1=findViewById(R.id.butt0);
+        but1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(view.getId()==R.id.butt0){
+                    Intent inte=new Intent();
+                    inte.setClass(MainActivity.this,secondActivity.class);
+                    startActivity(inte);
+                }
+            }
+        });
     }
 }

@@ -7,20 +7,31 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="522dp"
+        android:layout_height="437dp"
+        android:layout_marginTop="0px"
         app:srcCompat="@drawable/timg" />
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/butt0"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="0px"
+        android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="46dp"
-        android:text="欢迎" />
+        android:background="#00ced1"
+        android:text="开始" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="2000dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:text="欢迎使用智能家居客户端" />
 </RelativeLayout>
 
 </LinearLayout>
