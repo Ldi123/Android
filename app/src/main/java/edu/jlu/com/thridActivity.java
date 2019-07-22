@@ -3,14 +3,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import java.io.File;
 import java.io.FileOutputStream;
 import java.net.NetworkInterface;
 import java.util.Collections;
@@ -24,6 +29,7 @@ public class thridActivity extends AppCompatActivity {
     private TextView tv3;
     private TextView tv4;
     private TextView tv5;
+    Button but1;
     Context mcontext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +41,17 @@ public class thridActivity extends AppCompatActivity {
         tv3 = findViewById(R.id.tv3);
         tv4 = findViewById(R.id.tv4);
         tv5 = findViewById(R.id.tv5);
+        but1=findViewById(R.id.bu0);
+        but1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                intent.setData(Uri.parse("http://10.46.190.179:8080/TestWebA/NewFile.jsp"));
+                startActivity(intent);
+            }
+        });
         showInformation();
-        String[] strs = {"基神","B神","翔神","曹神","J神"};
-        //创建ArrayAdapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,strs);
-        //获取ListView对象，通过调用setAdapter方法为ListView设置Adapter设置适配器
-        ListView list_test = (ListView) findViewById(R.id.list_item);
-        list_test.setAdapter(adapter);
     }
 
     public void showInformation() {
@@ -66,14 +76,22 @@ public class thridActivity extends AppCompatActivity {
         //获取ICCID
         String iccid = getICCID(mcontext);
         tv5.setText("ICCID:    " + iccid);
-        FileOutputStream fos;
-        try {
-            fos=openFileOutput("date.txt",MODE_APPEND);//把文件输出到data中
-            fos.write(imei.getBytes());//将我们写入的字符串变成字符数组）
-             fos.close();
+
+        String state= Environment.getExternalStorageState();
+        if(state.equals(Environment.MEDIA_MOUNTED)){
+            File SDpath=Environment.getExternalStorageDirectory();
+            File file=new File(SDpath,"data.txt");
+            FileOutputStream fos;
+            try {
+                fos=new FileOutputStream(file);//把文件输出到data中
+                fos.write(("imei"+":"+imei).getBytes());//将我们写入的字符串变成字符数组）
+                System.out.println("write successfully!");
+                fos.close();
             } catch (Exception e) {
-            e.printStackTrace();
+                e.printStackTrace();
             }
+        }
+
     }
 
     /**
