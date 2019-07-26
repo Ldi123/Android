@@ -11,48 +11,29 @@ import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final String TODO = null;
+    File file;
     Button but1;
     Context mcontext;
-    private TextView tv1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         but1=findViewById(R.id.butt0);
         mcontext = getApplicationContext();
-        //声明一个对话框对象
-        AlertDialog dialog;
-        //绑定当前界面窗口
-        dialog = new AlertDialog.Builder(this).setTitle("授权获取手机IMEI")
-                .setMessage("是否确认授权？")
-                .setIcon(R.mipmap.ic_launcher)
-                .setPositiveButton("确定",  new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //dialog.dismiss();
-                        //MainActivity.this.finish();
-                        showInformation();
-                    }
-
-                })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        MainActivity.this.finish();
-                    }
-                })
-                .create();
-        dialog.show();
+        Judge();
         but1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +45,54 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    /**
+     * IO流判断是否已经获取获取了IEMI，并创建verify_imei了文件
+     */
+    private void Judge() {
+        InputStream in = null;
+        try {
+            file = new File("/data/data/edu.jlu.com/shared_prefs/Imei.xml");
+            in = new BufferedInputStream(new FileInputStream(file));
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+            if (null != in) {
+                try {
+                    in.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                //声明一个对话框对象
+                AlertDialog dialog;
+                //绑定当前界面窗口
+                dialog = new AlertDialog.Builder(this).setTitle("授权获取手机IMEI")
+                        .setMessage("是否确认授权？")
+                        .setIcon(R.mipmap.ic_launcher)
+                        .setPositiveButton("确定",  new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //dialog.dismiss();
+                                //MainActivity.this.finish();
+                                showInformation();
+                            }
+
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                MainActivity.this.finish();
+                            }
+                        })
+                        .create();
+                dialog.show();
+               showInformation();//获取IMEI，并生成verify_imei文件
+            }
+        }
+    }
     public void showInformation() {
         //获取IMEI地址
         String imei = getIMEI(mcontext);

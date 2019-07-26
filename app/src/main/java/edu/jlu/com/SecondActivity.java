@@ -3,32 +3,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-import android.widget.Button;
-public class SecondActivity extends AppCompatActivity {
-    Button but1;
-    Handler handler = new Handler();
+import android.widget.ProgressBar;
+public class SecondActivity extends AppCompatActivity{
+    public long SPLASH_LENGTH = 3000;
+    ProgressBar pg;
+    int i=0;
+    int pgmax=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second);
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                // handler自带方法实现定时器
-                System.out.println("33331");
-                handler.postDelayed(this, 1000*3);//每隔3s执行
-            }
-        };
-        handler.postDelayed(runnable, 1000*60);//延时多长时间启动定时器
-        but1=findViewById(R.id.button0);
-        but1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent inte=new Intent();
-                inte.setClass(SecondActivity.this, ThridActivity.class);
-                startActivity(inte);
-            }
-        });
+        pg=findViewById(R.id.bar);
+        pgmax=pg.getMax();
+        Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {  //使用handler的postDelayed实现延时跳转
+                    public void run() {
+                        while (i<pgmax){
+                            pg.setProgress(i);
+                            ++i;
+                        }
+                        Intent intent = new Intent(SecondActivity.this, ThridActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    }, SPLASH_LENGTH);//3秒后跳转至应用主界面下一个界面
     }
 }
