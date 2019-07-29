@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     /**
-     * IO流判断是否已经获取获取了IEMI，并创建verify_imei了文件
+     * IO流判断是否已经获取获取了IEMI，并创建了imei文件
      */
     private void Judge() {
         InputStream in = null;
